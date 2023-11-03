@@ -20,7 +20,7 @@ export default function DesignRoute() {
 					<div key={i}>
 						<h2 className="mb-4 mt-8 text-h2">{faker.person.jobType()}s</h2>
 						<div className={cn('flex max-w-lg flex-wrap gap-4')}>
-							{Array.from({ length: 5 }).map((_, i) => (
+							{Array.from({ length: 3 }).map((_, i) => (
 								<Card className=" min-w-full" key={i}>
 									<CardHeader>
 										<CardTitle>{faker.person.fullName()}</CardTitle>
@@ -30,18 +30,14 @@ export default function DesignRoute() {
 									</CardHeader>
 									<CardContent>
 										<div className="flex flex-col gap-1">
-											{Array.from({
-												length: faker.number.int({ min: 1, max: 2 }),
-											}).map((_, i) => (
-												<Icon key={i} name="phone" size="lg">
-													<Link
-														className="underline"
-														to={`tel:${faker.phone.number()}`}
-													>
-														{faker.phone.number()}
-													</Link>
-												</Icon>
-											))}
+											<Icon name="phone" size="lg">
+												<Link
+													className="underline"
+													to={`tel:${faker.phone.number()}`}
+												>
+													{faker.phone.number()}
+												</Link>
+											</Icon>
 											<Icon name="link-2" size="lg">
 												<Link className="underline" to={faker.internet.url()}>
 													{faker.internet.url()}
