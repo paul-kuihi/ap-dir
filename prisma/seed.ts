@@ -10,6 +10,7 @@ import {
 	img,
 } from '#tests/db-utils.ts'
 import { insertGitHubUser } from '#tests/mocks/github.ts'
+import { Contact } from '@prisma/client'
 
 async function seed() {
 	console.log('🌱 Seeding...')
@@ -255,6 +256,28 @@ async function seed() {
 	})
 	console.timeEnd(`🐨 Created admin user "kody"`)
 
+	const totalBusinesses = 10
+	const businessTypes = [
+		'Builder',
+		'Plumber',
+		'Electrician',
+		'Painter',
+	] as const
+	console.time(`💼 Created ${totalBusinesses} businesses...`)
+	Array.from({ length: 10 }).map(async () => {
+		await prisma.business.create({
+			select: { id: true },
+			data: {
+				name: faker.person.fullName(),
+				type: businessTypes[faker.number.int({ min: 0, max: 3 })],
+				description: faker.company.catchPhrase(),
+				contacts: {
+					create: generateContacts(),
+				},
+			},
+		})
+	})
+	console.timeEnd(`💼 Created ${totalBusinesses} businesses...`)
 	console.timeEnd(`🌱 Database has been seeded`)
 }
 
@@ -266,3 +289,27 @@ seed()
 	.finally(async () => {
 		await prisma.$disconnect()
 	})
+
+function generateContacts(): Pick<Contact, 'url' | 'value' | 'type'>[] {
+	const link = faker.internet.url()
+	const email = faker.internet.email()
+	const phone = faker.phone.number()
+
+	return [
+		{
+			type: 'link-2',
+			url: link,
+			value: link,
+		},
+		{
+			type: 'phone',
+			url: `tel:${phone}`,
+			value: phone,
+		},
+		{
+			type: 'envelope-closed',
+			url: `mailto:${email}`,
+			value: email,
+		},
+	]
+}
