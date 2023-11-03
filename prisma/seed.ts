@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker'
+import { type Contact } from '@prisma/client'
 import { promiseHash } from 'remix-utils/promise'
 import { prisma } from '#app/utils/db.server.ts'
 import {
@@ -10,7 +11,6 @@ import {
 	img,
 } from '#tests/db-utils.ts'
 import { insertGitHubUser } from '#tests/mocks/github.ts'
-import { Contact } from '@prisma/client'
 
 async function seed() {
 	console.log('🌱 Seeding...')
