@@ -10,6 +10,32 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Business {
+  id          String  @id @default(cuid())
+  name        String
+  type        String
+  description String?
+  contacts    Contact[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Contact {
+  id          String  @id @default(cuid())
+  url         String
+  value       String
+  type        String
+  business    Business   @relation(fields: [businessId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  businessId  String
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // non-unique foreign key
+  @@index([businessId])
+}
+
 model User {
   id       String  @id @default(cuid())
   email    String  @unique
