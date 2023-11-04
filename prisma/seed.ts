@@ -256,20 +256,34 @@ async function seed() {
 	})
 	console.timeEnd(`🐨 Created admin user "kody"`)
 
-	const totalBusinesses = 10
 	const businessTypes = [
 		'Builder',
 		'Plumber',
 		'Electrician',
 		'Painter',
 	] as const
+	console.time(`💼 Created ${businessTypes.length} business types...`)
+	businessTypes.map(
+		async name =>
+			await prisma.businessType.create({
+				select: { name: true },
+				data: { name },
+			}),
+	)
+	console.timeEnd(`💼 Created ${businessTypes.length} business types...`)
+
+	const totalBusinesses = 10
 	console.time(`💼 Created ${totalBusinesses} businesses...`)
 	Array.from({ length: 10 }).map(async () => {
 		await prisma.business.create({
 			select: { id: true },
 			data: {
 				name: faker.person.fullName(),
-				type: businessTypes[faker.number.int({ min: 0, max: 3 })],
+				type: {
+					connect: {
+						name: businessTypes[faker.number.int({ min: 0, max: 3 })],
+					},
+				},
 				description: faker.company.catchPhrase(),
 				contacts: {
 					create: generateContacts(),
