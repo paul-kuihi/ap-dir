@@ -115,6 +115,46 @@ export async function img({
 	}
 }
 
+const businessTypes = ['Builder', 'Plumber', 'Electrician', 'Painter'] as const
+
+export function createBusiness() {
+	return {
+		name: faker.person.fullName(),
+		description: faker.company.catchPhrase(),
+		contacts: [],
+	}
+}
+
+export function createBusinessType() {
+	return {
+		name: businessTypes[faker.number.int({ min: 0, max: 3 })].toString(),
+	}
+}
+
+export function createContacts() {
+	const link = faker.internet.url()
+	const email = faker.internet.email()
+	const phone = faker.phone.number()
+
+	return [
+		{
+			type: 'link-2',
+			url: link,
+			value: link,
+		},
+		{
+			type: 'phone',
+			url: `tel:${phone}`,
+			value: phone,
+		},
+		{
+			type: 'envelope-closed',
+			url: `mailto:${email}`,
+			value: email,
+		},
+	]
+}
+
 export async function cleanupDb(prisma: PrismaClient) {
 	const tables = await prisma.$queryRaw<
 		{ name: string }[]
